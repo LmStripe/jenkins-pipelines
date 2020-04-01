@@ -4,9 +4,6 @@ node {
 		buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5')), 
 		
 		// Below line triggers this job every minute
-		pipelineTriggers([pollSCM('* * * * *')])
-		])
-        // Below line triggers this job every minute 
 		pipelineTriggers([pollSCM('* * * * *')]),
 		parameters([choice(choices: [
 			'dev1.lazizm.com', 
@@ -17,32 +14,32 @@ node {
 			name: 'ENVIR')]), 
 		])
 
-    // Pulls repo from developer
+		// Pulls a repo from developer
 	stage("Pull Repo"){
 		git   'https://github.com/farrukh90/cool_website.git'
 	}
-
+		//Installs web server on different environment
 	stage("Install Prerequisites"){
 		sh """
-		ssh centos@jenkins_worker1.lazizm.com                 sudo yum install httpd -y
+		ssh centos@${ENVIR}                 sudo yum install httpd -y
 		"""
 	}
-	   //Copies over developers files to different enviroment
+		//Copies over developers files to different environment
 	stage("Copy artifacts"){
 		sh """
-		scp -r *  centos@jenkins_worker1.lazizm.com:/tmp
-		ssh centos@jenkins_worker1.lazizm.com                 sudo cp -r /tmp/index.html /var/www/html/
-		ssh centos@jenkins_worker1.lazizm.com                 sudo cp -r /tmp/style.css /var/www/html/
-		ssh centos@jenkins_worker1.lazizm.com				   sudo chown centos:centos /var/www/html/
-		ssh centos@jenkins_worker1.lazizm.com				   sudo chmod 777 /var/www/html/*
+		scp -r *  centos@${ENVIR}:/tmp
+		ssh centos@${ENVIR}                 sudo cp -r /tmp/index.html /var/www/html/
+		ssh centos@${ENVIR}                 sudo cp -r /tmp/style.css /var/www/html/
+		ssh centos@${ENVIR}				    sudo chown centos:centos /var/www/html/
+		ssh centos@${ENVIR}				    sudo chmod 777 /var/www/html/*
 		"""
 	}
-	    //Restart web server
+		//Restarts web server
 	stage("Restart web server"){
-		sh "ssh centos@jenkins_worker1.lazizm.com                 sudo systemctl restart httpd"
+		sh "ssh centos@dev1.lazizm.com                 sudo systemctl restart httpd"
 	}
 
-	//Sends a message to slack 
+		//Sends a message to slack
 	stage("Slack"){
 		slackSend color: '#BADA55', message: 'Hello, World!'
 	}
