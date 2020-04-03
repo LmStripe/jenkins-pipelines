@@ -1,7 +1,7 @@
 node {
     properties([
             //Keeps only last 5 builds
-        buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5'))
+        buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5')),
         pipelineTriggers([
             // Runs with input job
             upstream('Input'),
