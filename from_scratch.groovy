@@ -12,7 +12,7 @@ node {
 			'stage1.lazizm.com', 
 			'prod1.lazizm.com'], 
 			description: 'Please choose an environment', 
-			name: 'ENVIR')]),
+			name: 'ENVIR'),
 
 			choices: [
 			'v0.1', 
@@ -22,6 +22,7 @@ node {
 			'v0.5'], 
             description: 'Which version should we deploy?', 
             name: 'Version')])])
+			]}
 
 		])
 
