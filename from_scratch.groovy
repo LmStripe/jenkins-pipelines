@@ -1,3 +1,4 @@
+  
 node {
 	properties([
 		// Below line sets "Discard Builds more than 5"
@@ -57,11 +58,15 @@ node {
 	}
 		//Restarts web server
 	stage("Restart web server"){
-		sh "ssh centos@${ENVIR}               sudo systemctl restart httpd"
+		ws("tmp/") {
+			sh "ssh centos@${ENVIR}               sudo systemctl restart httpd"
+		}
 	}
 
 		//Sends a message to slack
 	stage("Slack"){
-		slackSend color: '#BADA55', message: 'Hello, World!'
+		ws("mnt/"){
+			slackSend color: '#BADA55', message: 'Hello, World!'
+		}
 	}
 }
