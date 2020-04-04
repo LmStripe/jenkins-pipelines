@@ -6,6 +6,7 @@ node {
 		// Below line triggers this job every minute
 		pipelineTriggers([pollSCM('* * * * *')]),
 		parameters([
+			// Asks for Environment to Build
 			choice(choices: [
 			'dev1.lazizm.com', 
 			'qa1.lazizm.com', 
@@ -14,17 +15,24 @@ node {
 			description: 'Please choose an environment', 
 			name: 'ENVIR'),
 
-			choices(choices: [
-			'v0.1', 
-			'v0.2', 
-			'v0.3', 
-			'v0.4', 
-			'v0.5'], 
-            description: 'Which version should we deploy?', 
-            name: 'Version')])]),
-			string(defaultValue: 'v1', description: 'Please enter version number', name: 'APP_VERSION', trim: true)
-			]}
+			// Asks for version
+			choice(choices: [
+				'v0.1', 
+				'v0.2', 
+				'v0.3', 
+				'v0.4', 
+				'v0.5'
+				], 
+			description: 'Which version should we deploy?', 
+			name: 'Version'),
 
+
+			// Asks for an input
+			string(defaultValue: 'v1', 
+			description: 'Please enter version number', 
+			name: 'APP_VERSION', 
+			trim: true)
+			])
 		])
 
 		// Pulls a repo from developer
