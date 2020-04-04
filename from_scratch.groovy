@@ -5,13 +5,24 @@ node {
 		disableConcurrentBuilds(),
 		// Below line triggers this job every minute
 		pipelineTriggers([pollSCM('* * * * *')]),
-		parameters([choice(choices: [
+		parameters([
+			choice(choices: [
 			'dev1.lazizm.com', 
 			'qa1.lazizm.com', 
 			'stage1.lazizm.com', 
 			'prod1.lazizm.com'], 
 			description: 'Please choose an environment', 
-			name: 'ENVIR')]), 
+			name: 'ENVIR')]),
+
+			choices: [
+			'v0.1', 
+			'v0.2', 
+			'v0.3', 
+			'v0.4', 
+			'v0.5'], 
+            description: 'Which version should we deploy?', 
+            name: 'Version')])])
+
 		])
 
 		// Pulls a repo from developer
