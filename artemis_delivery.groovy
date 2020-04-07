@@ -16,13 +16,22 @@ node {
 				checkout([$class: 'GitSCM', branches: [[name: 'dev']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/fuchicorp/artemis.git']]])
 		}
 	}
-}
+ }
 	stage("Get Credentials"){
 		timestamps {
 			ws{
 				sh '''
                     aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 967946929484.dkr.ecr.us-east-1.amazonaws.com/artemis					'''
 		}
-	}
-}
-}
+	 
+ } 
+	stage("Build Docker Image"){
+		timestamps {
+			ws {
+				sh '''
+					docker build -t artemis:${Version} .
+					'''
+            }
+        }    
+    }
+}    
